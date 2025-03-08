@@ -3,11 +3,15 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavLink } from "react-router-dom";
+import Badge from "@mui/material/Badge";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useSelector } from "react-redux";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 
 const Header = () => {
+  const { cart } = useSelector((state) => state.updateCart);
+  console.log(cart.length);
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -28,10 +32,13 @@ const Header = () => {
                 Product
               </NavLink>
               <NavLink className="w-100 text-decoration-none text-white">
-                <ShoppingCartIcon
-                  onClick={handleClick}
+                <Badge
+                  badgeContent={cart.length}
+                  color="primary"
                   style={{ float: "right" }}
-                />
+                >
+                  <ShoppingCartIcon onClick={handleClick} />
+                </Badge>
               </NavLink>
             </Nav>
           </Navbar.Collapse>
@@ -52,7 +59,13 @@ const Header = () => {
           horizontal: "left",
         }}
       >
-        <MenuItem onClick={handleClose}>Your carts is empty</MenuItem>
+        <MenuItem onClick={handleClose}>
+          {cart.length === 0 ? (
+            <div>Your carts is empty</div>
+          ) : (
+            <div>use cart</div>
+          )}
+        </MenuItem>
       </Menu>
     </div>
   );
